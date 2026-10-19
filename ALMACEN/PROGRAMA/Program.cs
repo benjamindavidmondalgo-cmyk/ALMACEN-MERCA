@@ -8,11 +8,11 @@ namespace ALMACEN
     {
         static void Main(string[] args)
         {
-            // Ruta dinámica hacia el archivo permanente en la raíz del proyecto
             string rutaTxt = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\movimientos_vicmar.txt");
             string rutaDocumentos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\DOCUMENTOS");
+            
+            string rutaGuias = Path.Combine(rutaDocumentos, "Guias");
 
-            // Cargar el inventario previo desde el archivo si ya existe
             List<string> inventario = CargarInventarioDesdeArchivo(rutaTxt);
             bool salir = false;
 
@@ -24,9 +24,12 @@ namespace ALMACEN
                 Console.WriteLine("========================================");
                 Console.WriteLine("1. Registrar / Agregar Stock");
                 Console.WriteLine("2. Ver Inventario Actual");
-                Console.WriteLine("3. Salir");
+                Console.WriteLine("3. Ver documentos (Facturas / Guías)");
+                Console.WriteLine("4. Registrar Guía con Fecha y Hora");
+                Console.WriteLine("5. Ver contenido de una Guía guardada"); 
+                Console.WriteLine("6. Salir");                              
                 Console.WriteLine("========================================");
-                Console.Write("Selecciona una opción (1-3): ");
+                Console.Write("Selecciona una opción (1-6): ");
 
                 string opcion = Console.ReadLine();
 
@@ -43,12 +46,8 @@ namespace ALMACEN
 
                             try
                             {
-                                // Se guarda de forma permanente en el archivo .txt
                                 File.AppendAllText(rutaTxt, registro + Environment.NewLine);
-                                
-                                // Se actualiza la lista en memoria
                                 inventario.Add(registro);
-
                                 Console.WriteLine("\n[✓] ¡Registrado y guardado PERMANENTEMENTE en 'movimientos_vicmar.txt'!");
                             }
                             catch (Exception ex)
@@ -75,16 +74,124 @@ namespace ALMACEN
                                 Console.WriteLine($"{i + 1}. {inventario[i]}");
                             }
                         }
-                        Console.WriteLine($"\n(Carpeta de documentos vinculada: {rutaDocumentos})");
                         break;
 
                     case "3":
+                        Console.WriteLine("\n--- DOCUMENTOS (FACTURAS / GUÍAS) ---");
+                        try
+                        {
+                            if (Directory.Exists(rutaDocumentos))
+                            {
+                                string[] archivos = Directory.GetFiles(rutaDocumentos, "*.*", SearchOption.AllDirectories);
+
+                                if (archivos.Length == 0)
+                                {
+                                    Console.WriteLine("La carpeta DOCUMENTOS y sus subcarpetas están vacías.");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Archivos encontrados:");
+                                    foreach (var archivo in archivos)
+                                    {
+                                        string rutaRelativa = archivo.Replace(rutaDocumentos, "").TrimStart(Path.DirectorySeparatorChar);
+                                        Console.WriteLine($" - {rutaRelativa}");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("[!] La carpeta 'DOCUMENTOS' todavía no existe.");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"[!] Error al leer los documentos: {ex.Message}");
+                        }
+                        break;
+
+                    case "4":
+                        Console.WriteLine("\n--- REGISTRAR NUEVA GUÍA ---");
+                        Console.Write("Ingresa el número de guía o descripción: ");
+                        string detalleGuia = Console.ReadLine();
+
+                        if (!string.IsNullOrWhiteSpace(detalleGuia))
+                        {
+                            try
+                            {
+                                Directory.CreateDirectory(rutaGuias);
+
+                                string marcaTiempoArchivo = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+                                string nombreArchivoGuia = Path.Combine(rutaGuias, $"Guia_{marcaTiempoArchivo}.txt");
+
+                                string contenidoGuia = $"REGISTRO DE GUÍA\nFecha y Hora: {DateTime.Now:yyyy-MM-dd HH:mm:ss}\nDetalle: {detalleGuia}\n";
+
+                                File.WriteAllText(nombreArchivoGuia, contenidoGuia);
+
+                                Console.WriteLine($"\n[✓] ¡Guía guardada con éxito en la carpeta Guias!");
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"\n[!] Error al crear la guía: {ex.Message}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("\n[X] Error: El detalle de la guía no puede estar vacío.");
+                        }
+                        break;
+
+                    case "5": 
+                        Console.WriteLine("\n--- VER CONTENIDO DE GUÍAS GUARDADAS ---");
+                        try
+                        {
+                            if (Directory.Exists(rutaGuias))
+                            {
+                                string[] guias = Directory.GetFiles(rutaGuias, "*.txt");
+
+                                if (guias.Length == 0)
+                                {
+                                    Console.WriteLine("No hay guías registradas todavía.");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Guías disponibles:");
+                                    for (int i = 0; i < guias.Length; i++)
+                                    {
+                                        Console.WriteLine($"{i + 1}. {Path.GetFileName(guias[i])}");
+                                    }
+
+                                    Console.Write("\nElige el número de la guía que deseas leer: ");
+                                    if (int.TryParse(Console.ReadLine(), out int indice) && indice >= 1 && indice <= guias.Length)
+                                    {
+                                        string contenidoLeido = File.ReadAllText(guias[indice - 1]);
+                                        Console.WriteLine("\n----------------------------------------");
+                                        Console.WriteLine(contenidoLeido);
+                                        Console.WriteLine("----------------------------------------");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("\n[X] Número de guía no válido.");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("[!] Aún no existe la carpeta de Guías.");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"[!] Error al leer las guías: {ex.Message}");
+                        }
+                        break;
+
+                    case "6": // <-- Salir ahora es 6
                         salir = true;
                         Console.WriteLine("\n¡Saliendo del sistema. Hasta luego!");
                         break;
 
                     default:
-                        Console.WriteLine("\n[X] Opción no válida. Ingresa un número del 1 al 3.");
+                        Console.WriteLine("\n[X] Opción no válida. Ingresa un número del 1 al 6.");
                         break;
                 }
 
@@ -110,7 +217,6 @@ namespace ALMACEN
                 }
                 else
                 {
-                    // Si el archivo no existe, lo crea automáticamente vacío
                     File.Create(ruta).Close();
                 }
             }
