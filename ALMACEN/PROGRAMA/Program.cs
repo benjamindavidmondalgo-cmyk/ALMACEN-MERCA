@@ -121,23 +121,44 @@ namespace ALMACEN
 
                     case "4":
                         Console.WriteLine("\n--- REGISTRAR NUEVA GUÍA ---");
-                        Console.Write("Ingresa el número de guía o descripción: ");
-                        string detalleGuia = Console.ReadLine();
+                        Console.Write("Ingresa el número de guía: ");
+                        string numeroGuia = Console.ReadLine()?.Trim();
+                        Console.Write("Ingresa la descripción o detalle de la guía: ");
+                        string detalleGuia = Console.ReadLine()?.Trim();
 
-                        if (!string.IsNullOrWhiteSpace(detalleGuia))
+                        if (!string.IsNullOrWhiteSpace(numeroGuia) && !string.IsNullOrWhiteSpace(detalleGuia))
                         {
                             try
                             {
                                 Directory.CreateDirectory(rutaGuias);
 
-                                string marcaTiempoArchivo = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-                                string nombreArchivoGuia = Path.Combine(rutaGuias, $"Guia_{marcaTiempoArchivo}.txt");
+                                bool guiaDuplicada = false;
+                                string[] guiasExistentes = Directory.GetFiles(rutaGuias, "*.txt");
+            
+                                foreach (string archivo in guiasExistentes)
+                                {
+                                    string contenido = File.ReadAllText(archivo);
+                                    if (contenido.Contains($"Número de Guía: {numeroGuia}"))
+                                    {
+                                        guiaDuplicada = true;
+                                        break;
+                                    }
+                                }
 
-                                string contenidoGuia = $"REGISTRO DE GUÍA\nFecha y Hora: {DateTime.Now:yyyy-MM-dd HH:mm:ss}\nDetalle: {detalleGuia}\n";
+                                if (guiaDuplicada)
+                                {
+                                    Console.WriteLine($"\n[X] Error: Ya existe una guía registrada con el número '{numeroGuia}'.");
+                                }
+                                else
+                                {
+                                    string marcaTiempoArchivo = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+                                    string nombreArchivoGuia = Path.Combine(rutaGuias, $"Guia_{marcaTiempoArchivo}.txt");
+                
+                                    string contenidoGuia = $"REGISTRO DE GUÍA\nFecha y Hora: {DateTime.Now:yyyy-MM-dd HH:mm:ss}\nNúmero de Guía: {numeroGuia}\nDetalle: {detalleGuia}\n";
 
-                                File.WriteAllText(nombreArchivoGuia, contenidoGuia);
-
-                                Console.WriteLine($"\n[✓] ¡Guía guardada con éxito en la carpeta Guias!");
+                                    File.WriteAllText(nombreArchivoGuia, contenidoGuia);
+                                    Console.WriteLine($"\n[✓] ¡Guía guardada con éxito en la carpeta Guias!");
+                                }
                             }
                             catch (Exception ex)
                             {
@@ -146,7 +167,7 @@ namespace ALMACEN
                         }
                         else
                         {
-                            Console.WriteLine("\n[X] Error: El detalle de la guía no puede estar vacío.");
+                            Console.WriteLine("\n[X] Error: Todos los campos de la guía son obligatorios.");
                         }
                         break;
 
@@ -167,10 +188,25 @@ namespace ALMACEN
                                     Console.WriteLine("Guías disponibles:");
                                     for (int i = 0; i < guias.Length; i++)
                                     {
-                                        Console.WriteLine($"{i + 1}. {Path.GetFileName(guias[i])}");
+                
+                                        string contenidoArchivo = File.ReadAllText(guias[i]);
+                                        string primeraLineaGuia = Path.GetFileName(guias[i]); 
+
+                                        string[] lineas = File.ReadAllLines(guias[i]);
+                                        string infoMostrar = Path.GetFileName(guias[i]);
+
+                                        foreach (var linea in lineas)
+                                        {
+                                            if (linea.StartsWith("Número de Guía:") || linea.StartsWith("Detalle:"))
+                                            {
+                                                infoMostrar += " | " + linea;
+                                            }
+                                        }
+
+                                        Console.WriteLine($"{i + 1}. {infoMostrar}");
                                     }
 
-                                    Console.Write("\nElige el número de la guía que deseas leer: ");
+                                    Console.Write("\nElige el número de la guía que deseas leer completo: ");
                                     if (int.TryParse(Console.ReadLine(), out int indice) && indice >= 1 && indice <= guias.Length)
                                     {
                                         string contenidoLeido = File.ReadAllText(guias[indice - 1]);
