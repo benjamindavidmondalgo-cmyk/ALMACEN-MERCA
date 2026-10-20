@@ -272,7 +272,7 @@ namespace ALMACEN
 
 
 
-                    case "8": // <-- Salir ahora es 6
+                    case "8": 
                         salir = true;
                         Console.WriteLine("\n¡Saliendo del sistema. Hasta luego!");
                         break;
