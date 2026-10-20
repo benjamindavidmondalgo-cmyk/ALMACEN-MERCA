@@ -39,21 +39,30 @@ namespace ALMACEN
                     case "1":
                         Console.WriteLine("\n--- REGISTRAR / AGREGAR STOCK ---");
                         Console.Write("Ingresa el producto y la cantidad: ");
-                        string detalle = Console.ReadLine();
+                        string detalle = Console.ReadLine()?.Trim();
 
                         if (!string.IsNullOrWhiteSpace(detalle))
                         {
-                            string registro = $"{DateTime.Now:yyyy-MM-dd HH:mm} | {detalle}";
+                            bool yaExiste = inventario.Exists(item => item.ToLower().Contains(detalle.ToLower()));
 
-                            try
+                            if (yaExiste)
                             {
-                                File.AppendAllText(rutaTxt, registro + Environment.NewLine);
-                                inventario.Add(registro);
-                                Console.WriteLine("\n[✓] ¡Registrado y guardado PERMANENTEMENTE en 'movimientos_vicmar.txt'!");
+                                Console.WriteLine("\n[X] Error: Este producto o registro ya existe en el sistema.");
                             }
-                            catch (Exception ex)
+                            else
                             {
-                                Console.WriteLine($"\n[!] Error al guardar en el archivo: {ex.Message}");
+                                string registro = $"{DateTime.Now:yyyy-MM-dd HH:mm} | {detalle}";
+
+                                try
+                                {
+                                    File.AppendAllText(rutaTxt, registro + Environment.NewLine);
+                                    inventario.Add(registro);
+                                    Console.WriteLine("\n[✓] ¡Registrado y guardado PERMANENTEMENTE en 'movimientos_vicmar.txt'!");
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"\n[!] Error al guardar en el archivo: {ex.Message}");
+                                }
                             }
                         }
                         else
@@ -189,39 +198,61 @@ namespace ALMACEN
                     case "6":
                         Console.WriteLine("\n--- REGISTRAR NUEVA FACTURA ---");
                         Console.Write("Ingresa el número de factura: ");
-                        string numeroFactura = Console.ReadLine();
+                        string numeroFactura = Console.ReadLine()?.Trim();
                         Console.Write("Ingresa el nombre del proveedor: ");
-                        string proveedor = Console.ReadLine();
+                        string proveedor = Console.ReadLine()?.Trim();
                         Console.Write("Ingresa el detalle de la compra: ");
-                        string detalleFactura = Console.ReadLine();
+                        string detalleFactura = Console.ReadLine()?.Trim();
                         Console.Write("Ingresa el monto total (S/): ");
-                        string monto = Console.ReadLine();
+                        string monto = Console.ReadLine()?.Trim();
+
                         if (!string.IsNullOrWhiteSpace(numeroFactura) &&
                             !string.IsNullOrWhiteSpace(proveedor) &&
                             !string.IsNullOrWhiteSpace(detalleFactura) &&
                             !string.IsNullOrWhiteSpace(monto))
-                        {
-                            try
                             {
-                                string rutaFacturas = Path.Combine(rutaDocumentos, "facturas");
-                                Directory.CreateDirectory(rutaFacturas);
-                                string marcaTiempoArchivo = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-                                string nombreArchivoFactura = Path.Combine(rutaFacturas, $"Factura_{marcaTiempoArchivo}.txt");
-                                string contenidoFactura = $"REGISTRO DE FACTURA\nFecha y Hora: {DateTime.Now:yyyy-MM-dd HH:mm:ss}\nNúmero de Factura: {numeroFactura}\nProveedor: {proveedor}\nDetalle: {detalleFactura}\nMonto Total: S/ {monto}\n";
+                                try
+                                {
+                                    string rutaFacturas = Path.Combine(rutaDocumentos, "facturas");
+                                    Directory.CreateDirectory(rutaFacturas);
 
-                                File.WriteAllText(nombreArchivoFactura, contenidoFactura);
-                                Console.WriteLine("\n[✓] ¡Factura guardada con éxito en la carpeta facturas!");
+                                    bool facturaDuplicada = false;
+                                    string[] facturasExistentes = Directory.GetFiles(rutaFacturas, "*.txt");
+            
+                                    foreach (string archivo in facturasExistentes)
+                                    {
+                                        string contenido = File.ReadAllText(archivo);
+                                        if (contenido.Contains($"Número de Factura: {numeroFactura}"))
+                                        {
+                                            facturaDuplicada = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if (facturaDuplicada)
+                                    {
+                                        Console.WriteLine($"\n[X] Error: Ya existe una factura registrada con el número '{numeroFactura}'.");
+                                    }
+                                    else
+                                    {
+                                        string marcaTiempoArchivo = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+                                        string nombreArchivoFactura = Path.Combine(rutaFacturas, $"Factura_{marcaTiempoArchivo}.txt");
+                                        string contenidoFactura = $"REGISTRO DE FACTURA\nFecha y Hora: {DateTime.Now:yyyy-MM-dd HH:mm:ss}\nNúmero de Factura: {numeroFactura}\nProveedor: {proveedor}\nDetalle: {detalleFactura}\nMonto Total: S/ {monto}\n";
+
+                                        File.WriteAllText(nombreArchivoFactura, contenidoFactura);
+                                        Console.WriteLine("\n[✓] ¡Factura guardada con éxito en la carpeta facturas!");
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"\n[!] Error al crear la factura: {ex.Message}");
+                                }
                             }
-                            catch (Exception ex)
+                            else
                             {
-                                Console.WriteLine($"\n[!] Error al crear la factura: {ex.Message}");
+                                Console.WriteLine("\n[X] Error: Todos los campos de la factura son obligatorios.");
                             }
-                        }
-                        else
-                        {
-                            Console.WriteLine("\n[X] Error: Todos los campos de la factura son obligatorios.");
-                        }
-                        break;     
+                            break;
 
                     case "7":
                         Console.WriteLine("\n--- VER FACTURAS GUARDADAS ---");
