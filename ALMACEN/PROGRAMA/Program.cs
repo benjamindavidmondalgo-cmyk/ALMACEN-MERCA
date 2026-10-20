@@ -185,21 +185,17 @@ namespace ALMACEN
                             Console.WriteLine($"[!] Error al leer las guías: {ex.Message}");
                         }
                         break;
-                        
+                                               
                     case "6":
                         Console.WriteLine("\n--- REGISTRAR NUEVA FACTURA ---");
                         Console.Write("Ingresa el número de factura: ");
                         string numeroFactura = Console.ReadLine();
-
                         Console.Write("Ingresa el nombre del proveedor: ");
                         string proveedor = Console.ReadLine();
-
                         Console.Write("Ingresa el detalle de la compra: ");
                         string detalleFactura = Console.ReadLine();
-
                         Console.Write("Ingresa el monto total (S/): ");
                         string monto = Console.ReadLine();
-
                         if (!string.IsNullOrWhiteSpace(numeroFactura) &&
                             !string.IsNullOrWhiteSpace(proveedor) &&
                             !string.IsNullOrWhiteSpace(detalleFactura) &&
@@ -209,14 +205,11 @@ namespace ALMACEN
                             {
                                 string rutaFacturas = Path.Combine(rutaDocumentos, "facturas");
                                 Directory.CreateDirectory(rutaFacturas);
-
                                 string marcaTiempoArchivo = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
                                 string nombreArchivoFactura = Path.Combine(rutaFacturas, $"Factura_{marcaTiempoArchivo}.txt");
-
                                 string contenidoFactura = $"REGISTRO DE FACTURA\nFecha y Hora: {DateTime.Now:yyyy-MM-dd HH:mm:ss}\nNúmero de Factura: {numeroFactura}\nProveedor: {proveedor}\nDetalle: {detalleFactura}\nMonto Total: S/ {monto}\n";
 
                                 File.WriteAllText(nombreArchivoFactura, contenidoFactura);
-
                                 Console.WriteLine("\n[✓] ¡Factura guardada con éxito en la carpeta facturas!");
                             }
                             catch (Exception ex)
@@ -228,7 +221,55 @@ namespace ALMACEN
                         {
                             Console.WriteLine("\n[X] Error: Todos los campos de la factura son obligatorios.");
                         }
-                        break;      
+                        break;     
+
+                    case "7":
+                        Console.WriteLine("\n--- VER FACTURAS GUARDADAS ---");
+                        string rutaFacturasGuardadas = Path.Combine(rutaDocumentos, "facturas");
+                        try
+                        {
+                            if (Directory.Exists(rutaFacturasGuardadas))
+                            {
+                                string[] facturas = Directory.GetFiles(rutaFacturasGuardadas, "*.txt");
+                                if (facturas.Length == 0)
+                                {
+                                    Console.WriteLine("No hay facturas registradas todavía.");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Facturas disponibles:");
+                                    for (int i = 0; i < facturas.Length; i++)
+                                    {
+                                        Console.WriteLine($"{i + 1}. {Path.GetFileName(facturas[i])}");
+                                    }
+                                    Console.Write("\nElige el número de la factura que deseas leer: ");
+
+                                    if (int.TryParse(Console.ReadLine(), out int indice) &&
+                                        indice >= 1 && indice <= facturas.Length)
+                                    {
+                                        string contenidoLeido = File.ReadAllText(facturas[indice - 1]);
+                                        Console.WriteLine("\n----------------------------------------");
+                                        Console.WriteLine(contenidoLeido);
+                                        Console.WriteLine("----------------------------------------");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("\n[X] Número de factura no válido.");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("[!] Aún no existe la carpeta de facturas.");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"[!] Error al leer las facturas: {ex.Message}");
+                        }
+
+                        break;
+
 
 
                     case "8": // <-- Salir ahora es 6
