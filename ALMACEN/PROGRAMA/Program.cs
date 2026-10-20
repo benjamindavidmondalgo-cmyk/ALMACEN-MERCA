@@ -27,10 +27,11 @@ namespace ALMACEN
                 Console.WriteLine("3. Ver documentos (Facturas / Guías)");
                 Console.WriteLine("4. Registrar Guía con Fecha y Hora");
                 Console.WriteLine("5. Ver contenido de una Guía guardada"); 
-                Console.WriteLine("6. Salir");                              
+                Console.WriteLine("6. Registrar Factura");
+                Console.WriteLine("7. Ver Facturas Guardadas");
+                Console.WriteLine("8. Salir");
                 Console.WriteLine("========================================");
-                Console.Write("Selecciona una opción (1-6): ");
-
+                Console.Write("Selecciona una opción (1-8): ");
                 string opcion = Console.ReadLine();
 
                 switch (opcion)
@@ -184,8 +185,53 @@ namespace ALMACEN
                             Console.WriteLine($"[!] Error al leer las guías: {ex.Message}");
                         }
                         break;
+                        
+                    case "6":
+                        Console.WriteLine("\n--- REGISTRAR NUEVA FACTURA ---");
+                        Console.Write("Ingresa el número de factura: ");
+                        string numeroFactura = Console.ReadLine();
 
-                    case "6": // <-- Salir ahora es 6
+                        Console.Write("Ingresa el nombre del proveedor: ");
+                        string proveedor = Console.ReadLine();
+
+                        Console.Write("Ingresa el detalle de la compra: ");
+                        string detalleFactura = Console.ReadLine();
+
+                        Console.Write("Ingresa el monto total (S/): ");
+                        string monto = Console.ReadLine();
+
+                        if (!string.IsNullOrWhiteSpace(numeroFactura) &&
+                            !string.IsNullOrWhiteSpace(proveedor) &&
+                            !string.IsNullOrWhiteSpace(detalleFactura) &&
+                            !string.IsNullOrWhiteSpace(monto))
+                        {
+                            try
+                            {
+                                string rutaFacturas = Path.Combine(rutaDocumentos, "facturas");
+                                Directory.CreateDirectory(rutaFacturas);
+
+                                string marcaTiempoArchivo = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+                                string nombreArchivoFactura = Path.Combine(rutaFacturas, $"Factura_{marcaTiempoArchivo}.txt");
+
+                                string contenidoFactura = $"REGISTRO DE FACTURA\nFecha y Hora: {DateTime.Now:yyyy-MM-dd HH:mm:ss}\nNúmero de Factura: {numeroFactura}\nProveedor: {proveedor}\nDetalle: {detalleFactura}\nMonto Total: S/ {monto}\n";
+
+                                File.WriteAllText(nombreArchivoFactura, contenidoFactura);
+
+                                Console.WriteLine("\n[✓] ¡Factura guardada con éxito en la carpeta facturas!");
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"\n[!] Error al crear la factura: {ex.Message}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("\n[X] Error: Todos los campos de la factura son obligatorios.");
+                        }
+                        break;      
+
+
+                    case "8": // <-- Salir ahora es 6
                         salir = true;
                         Console.WriteLine("\n¡Saliendo del sistema. Hasta luego!");
                         break;
