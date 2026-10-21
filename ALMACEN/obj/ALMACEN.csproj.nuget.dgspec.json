@@ -1,25 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "D:\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj": {}
+    "C:\\PR\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj": {}
   },
   "projects": {
-    "D:\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj": {
+    "C:\\PR\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj",
+        "projectUniqueName": "C:\\PR\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj",
         "projectName": "ALMACEN",
-        "projectPath": "D:\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj",
-        "packagesPath": "C:\\Users\\OFICINA\\.nuget\\packages\\",
-        "outputPath": "D:\\ALMACEN-MERCA\\ALMACEN\\obj\\",
+        "projectPath": "C:\\PR\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj",
+        "packagesPath": "C:\\Users\\gary_\\.nuget\\packages\\",
+        "outputPath": "C:\\PR\\ALMACEN-MERCA\\ALMACEN\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\OFICINA\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\gary_\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

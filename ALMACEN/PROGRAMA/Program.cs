@@ -29,9 +29,10 @@ namespace ALMACEN
                 Console.WriteLine("5. Ver contenido de una Guía guardada"); 
                 Console.WriteLine("6. Registrar Factura");
                 Console.WriteLine("7. Ver Facturas Guardadas");
-                Console.WriteLine("8. Salir");
+                Console.WriteLine("8. Ver Resumen General del Almacén");
+                Console.WriteLine("9. Salir");
                 Console.WriteLine("========================================");
-                Console.Write("Selecciona una opción (1-8): ");
+                Console.Write("Selecciona una opción (1-9): ");
                 string opcion = Console.ReadLine();
 
                 switch (opcion)
@@ -338,8 +339,11 @@ namespace ALMACEN
                         break;
 
 
-
-                    case "8": 
+                    case "8":
+                        MostrarResumenGeneral(inventario, rutaGuias, Path.Combine(rutaDocumentos, "facturas"));
+                        break;
+                        
+                    case "9": 
                         salir = true;
                         Console.WriteLine("\n¡Saliendo del sistema. Hasta luego!");
                         break;
@@ -361,7 +365,6 @@ namespace ALMACEN
         static List<string> CargarInventarioDesdeArchivo(string ruta)
         {
             List<string> lineas = new List<string>();
-
             try
             {
                 if (File.Exists(ruta))
@@ -380,6 +383,24 @@ namespace ALMACEN
             }
 
             return lineas;
+        } 
+
+        // Método estático de la clase Program 
+        static void MostrarResumenGeneral(List<string> inventario, string rutaGuias, string rutaFacturas)
+        {
+            Console.WriteLine("\n========================================");
+            Console.WriteLine("        RESUMEN GENERAL DEL ALMACÉN     ");
+            Console.WriteLine("========================================");
+            
+            Console.WriteLine($"• Registros de stock en historial: {inventario.Count}");
+
+            int cantidadGuias = Directory.Exists(rutaGuias) ? Directory.GetFiles(rutaGuias, "*.txt").Length : 0;
+            Console.WriteLine($"• Total de guías registradas:     {cantidadGuias}");
+
+            int cantidadFacturas = Directory.Exists(rutaFacturas) ? Directory.GetFiles(rutaFacturas, "*.txt").Length : 0;
+            Console.WriteLine($"• Total de facturas registradas:  {cantidadFacturas}");
+            
+            Console.WriteLine("========================================\n");
         }
-    }
-}
+    } 
+} 

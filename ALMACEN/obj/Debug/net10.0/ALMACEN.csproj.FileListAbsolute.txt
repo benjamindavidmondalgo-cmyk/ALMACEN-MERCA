@@ -13,3 +13,17 @@ D:\ALMACEN-MERCA\ALMACEN\obj\Debug\net10.0\refint\ALMACEN.dll
 D:\ALMACEN-MERCA\ALMACEN\obj\Debug\net10.0\ALMACEN.pdb
 D:\ALMACEN-MERCA\ALMACEN\obj\Debug\net10.0\ALMACEN.genruntimeconfig.cache
 D:\ALMACEN-MERCA\ALMACEN\obj\Debug\net10.0\ref\ALMACEN.dll
+C:\PR\ALMACEN-MERCA\ALMACEN\bin\Debug\net10.0\ALMACEN.exe
+C:\PR\ALMACEN-MERCA\ALMACEN\bin\Debug\net10.0\ALMACEN.deps.json
+C:\PR\ALMACEN-MERCA\ALMACEN\bin\Debug\net10.0\ALMACEN.runtimeconfig.json
+C:\PR\ALMACEN-MERCA\ALMACEN\bin\Debug\net10.0\ALMACEN.dll
+C:\PR\ALMACEN-MERCA\ALMACEN\bin\Debug\net10.0\ALMACEN.pdb
+C:\PR\ALMACEN-MERCA\ALMACEN\obj\Debug\net10.0\ALMACEN.GeneratedMSBuildEditorConfig.editorconfig
+C:\PR\ALMACEN-MERCA\ALMACEN\obj\Debug\net10.0\ALMACEN.AssemblyInfoInputs.cache
+C:\PR\ALMACEN-MERCA\ALMACEN\obj\Debug\net10.0\ALMACEN.AssemblyInfo.cs
+C:\PR\ALMACEN-MERCA\ALMACEN\obj\Debug\net10.0\ALMACEN.csproj.CoreCompileInputs.cache
+C:\PR\ALMACEN-MERCA\ALMACEN\obj\Debug\net10.0\ALMACEN.dll
+C:\PR\ALMACEN-MERCA\ALMACEN\obj\Debug\net10.0\refint\ALMACEN.dll
+C:\PR\ALMACEN-MERCA\ALMACEN\obj\Debug\net10.0\ALMACEN.pdb
+C:\PR\ALMACEN-MERCA\ALMACEN\obj\Debug\net10.0\ALMACEN.genruntimeconfig.cache
+C:\PR\ALMACEN-MERCA\ALMACEN\obj\Debug\net10.0\ref\ALMACEN.dll
