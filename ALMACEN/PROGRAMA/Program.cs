@@ -40,13 +40,15 @@ namespace ALMACEN
                 {
                     case "1":
                         Console.WriteLine("\n--- REGISTRAR / AGREGAR STOCK ---");
-                        Console.Write("Ingresa el producto y la cantidad: ");
-                        string detalle = Console.ReadLine()?.Trim();
+                        Console.Write("Ingresa la cantidad: ");
+                        string cantidad = Console.ReadLine()?.Trim();
+                        Console.Write("Ingresa el nombre del producto: ");
+                        string nombreProducto = Console.ReadLine()?.Trim();
 
-                        if (!string.IsNullOrWhiteSpace(detalle))
+                        if (!string.IsNullOrWhiteSpace(cantidad) && !string.IsNullOrWhiteSpace(nombreProducto))
                         {
-                            bool yaExiste = inventario.Exists(item => item.ToLower().Contains(detalle.ToLower()));
-
+                            string detalle = $"{nombreProducto} - Cantidad: {cantidad}";
+                            bool yaExiste = inventario.Exists(item => item.ToLower().Contains(nombreProducto.ToLower()));
                             if (yaExiste)
                             {
                                 Console.WriteLine("\n[X] Error: Este producto o registro ya existe en el sistema.");
