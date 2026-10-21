@@ -1,2 +1,4 @@
 18/10/2026 21:53:50 -> INGRESO: 2
 2026-10-18 21:58 | tela de vaca
+2026-10-21 02:40 | focos - Cantidad: 8
+2026-10-21 02:40 | cocos - Cantidad: 5
