@@ -352,7 +352,7 @@ namespace ALMACEN
                         break;
 
                     default:
-                        Console.WriteLine("\n[X] Opción no válida. Ingresa un número del 1 al 6.");
+                        Console.WriteLine("\n[X] Opción no válida. Ingresa un número del 1 al 10.");
                         break;
                 }
 
