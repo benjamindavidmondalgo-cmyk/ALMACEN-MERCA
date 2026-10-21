@@ -30,9 +30,10 @@ namespace ALMACEN
                 Console.WriteLine("6. Registrar Factura");
                 Console.WriteLine("7. Ver Facturas Guardadas");
                 Console.WriteLine("8. Ver Resumen General del Almacén");
-                Console.WriteLine("9. Salir");
+                Console.WriteLine("9. Buscar en Inventario");
+                Console.WriteLine("10. Salir");
                 Console.WriteLine("========================================");
-                Console.Write("Selecciona una opción (1-9): ");
+                Console.Write("Selecciona una opción (1-10): ");
                 string opcion = Console.ReadLine();
 
                 switch (opcion)
@@ -342,8 +343,10 @@ namespace ALMACEN
                     case "8":
                         MostrarResumenGeneral(inventario, rutaGuias, Path.Combine(rutaDocumentos, "facturas"));
                         break;
-                        
-                    case "9": 
+                    case "9":
+                        BuscarEnInventario(inventario);
+                        break;    
+                    case "10": 
                         salir = true;
                         Console.WriteLine("\n¡Saliendo del sistema. Hasta luego!");
                         break;
@@ -401,6 +404,35 @@ namespace ALMACEN
             Console.WriteLine($"• Total de facturas registradas:  {cantidadFacturas}");
             
             Console.WriteLine("========================================\n");
+        }
+
+        // Método para filtrar y buscar movimientos específicos en el inventario
+        static void BuscarEnInventario(List<string> inventario)
+        {
+            Console.Write("\nIngresa el término o fecha a buscar (ej. INGRESO, Factura, 2026-10-19): ");
+            string busqueda = Console.ReadLine()?.Trim() ?? "";
+
+            if (string.IsNullOrWhiteSpace(busqueda))
+            {
+                Console.WriteLine("[!] El término de búsqueda no puede estar vacío.");
+                return;
+            }
+
+            var resultados = inventario.FindAll(linea => linea.Contains(busqueda, StringComparison.OrdinalIgnoreCase));
+
+            Console.WriteLine($"\n--- RESULTADOS DE BÚSQUEDA (Coincidencias: {resultados.Count}) ---");
+            if (resultados.Count > 0)
+            {
+                foreach (string registro in resultados)
+                {
+                    Console.WriteLine($"  ➜ {registro}");
+                }
+            }
+            else
+            {
+                Console.WriteLine(" No se encontraron registros que coincidan con la búsqueda.");
+            }
+            Console.WriteLine("-----------------------------------------------------------\n");
         }
     } 
 } 
