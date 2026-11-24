@@ -97,10 +97,30 @@ namespace ALMACEN
                                 else
                                 {
                                     Console.WriteLine("Guías encontradas:");
-                                    foreach (var guia in archivosGuias)
+                                    for (int i = 0; i < archivosGuias.Length; i++)
                                     {
-                                        string rutaRelativa = guia.Replace(rutaGuias, "").TrimStart(Path.DirectorySeparatorChar);
-                                        Console.WriteLine($" - {rutaRelativa}");
+                                        string rutaRelativa = archivosGuias[i].Replace(rutaGuias, "").TrimStart(Path.DirectorySeparatorChar);
+                                        Console.WriteLine($"{i + 1}. {rutaRelativa}");
+                                    }
+
+                                    Console.Write("\nIngresa el número de guía a eliminar (o 0 para volver): ");
+                                    if (int.TryParse(Console.ReadLine(), out int idxGuia) && idxGuia >= 1 && idxGuia <= archivosGuias.Length)
+                                    {
+                                        string objetivo = archivosGuias[idxGuia - 1];
+                                        Console.Write($"¿Eliminar '{Path.GetFileName(objetivo)}'? (S/N): ");
+                                        if (Console.ReadLine()?.Trim().ToUpper() == "S")
+                                        {
+                                            File.Delete(objetivo);
+                                            Console.WriteLine("\n[✓] Guía eliminada.");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("\nEliminación cancelada.");
+                                        }
+                                    }
+                                    else if (idxGuia != 0)
+                                    {
+                                        Console.WriteLine("\n[X] Número no válido.");
                                     }
                                 }
                             }
@@ -111,7 +131,7 @@ namespace ALMACEN
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"[!] Error al leer las guías: {ex.Message}");
+                            Console.WriteLine($"[!] Error al procesar las guías: {ex.Message}");
                         }
                         break;
 
@@ -130,10 +150,30 @@ namespace ALMACEN
                                 else
                                 {
                                     Console.WriteLine("Facturas encontradas:");
-                                    foreach (var factura in archivosFacturas)
+                                    for (int i = 0; i < archivosFacturas.Length; i++)
                                     {
-                                        string rutaRelativa = factura.Replace(rutaFacturas, "").TrimStart(Path.DirectorySeparatorChar);
-                                        Console.WriteLine($" - {rutaRelativa}");
+                                        string rutaRelativa = archivosFacturas[i].Replace(rutaFacturas, "").TrimStart(Path.DirectorySeparatorChar);
+                                        Console.WriteLine($"{i + 1}. {rutaRelativa}");
+                                    }
+
+                                    Console.Write("\nIngresa el número de factura a eliminar (o 0 para volver): ");
+                                    if (int.TryParse(Console.ReadLine(), out int idxFactura) && idxFactura >= 1 && idxFactura <= archivosFacturas.Length)
+                                    {
+                                        string objetivo = archivosFacturas[idxFactura - 1];
+                                        Console.Write($"¿Eliminar '{Path.GetFileName(objetivo)}'? (S/N): ");
+                                        if (Console.ReadLine()?.Trim().ToUpper() == "S")
+                                        {
+                                            File.Delete(objetivo);
+                                            Console.WriteLine("\n[✓] Factura eliminada.");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("\nEliminación cancelada.");
+                                        }
+                                    }
+                                    else if (idxFactura != 0)
+                                    {
+                                        Console.WriteLine("\n[X] Número no válido.");
                                     }
                                 }
                             }
@@ -144,7 +184,7 @@ namespace ALMACEN
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"[!] Error al leer las facturas: {ex.Message}");
+                            Console.WriteLine($"[!] Error al procesar las facturas: {ex.Message}");
                         }
                         break;
 
@@ -202,10 +242,22 @@ namespace ALMACEN
                                     Console.Write("\nElige el número de la guía que deseas leer: ");
                                     if (int.TryParse(Console.ReadLine(), out int indice) && indice >= 1 && indice <= guias.Length)
                                     {
-                                        string contenidoLeido = File.ReadAllText(guias[indice - 1]);
+                                        string guiaSeleccionada = guias[indice - 1];
+                                        string contenidoLeido = File.ReadAllText(guiaSeleccionada);
                                         Console.WriteLine("\n----------------------------------------");
                                         Console.WriteLine(contenidoLeido);
                                         Console.WriteLine("----------------------------------------");
+
+                                        Console.Write("\n¿Deseas eliminar esta guía? (S/N): ");
+                                        if (Console.ReadLine()?.Trim().ToUpper() == "S")
+                                        {
+                                            File.Delete(guiaSeleccionada);
+                                            Console.WriteLine("\n[✓] Guía eliminada.");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("\nLa guía se mantuvo guardada.");
+                                        }
                                     }
                                     else
                                     {
