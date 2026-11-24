@@ -6,3 +6,4 @@
 2026-10-21 02:40 | focos - Cantidad: 8
 2026-10-21 02:40 | cocos - Cantidad: 5
 >>>>>>> e36a0b97e3744518047989f9b05c4157d69ac403
+2026-11-24 02:40 | Producto: telas | Cantidad: 4
