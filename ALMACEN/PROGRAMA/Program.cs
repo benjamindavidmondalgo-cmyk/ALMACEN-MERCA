@@ -29,9 +29,10 @@ namespace ALMACEN
                 Console.WriteLine("5. Registrar Guía con Fecha y Hora");
                 Console.WriteLine("6. Registrar Factura con Fecha y Hora");
                 Console.WriteLine("7. Ver contenido de una Guía guardada");
-                Console.WriteLine("8. Salir");
+                Console.WriteLine("8. Retirar / Descontar Stock");
+                Console.WriteLine("9. Salir");
                 Console.WriteLine("========================================");
-                Console.Write("Selecciona una opción (1-8): ");
+                Console.Write("Selecciona una opción (1-9): ");
 
                 string opcion = Console.ReadLine();
 
@@ -308,7 +309,9 @@ namespace ALMACEN
                         }
                         break;
 
-                    case "8":
+s
+
+                    case "9":
                         salir = true;
                         Console.WriteLine("\n¡Saliendo del sistema. Hasta luego!");
                         break;
