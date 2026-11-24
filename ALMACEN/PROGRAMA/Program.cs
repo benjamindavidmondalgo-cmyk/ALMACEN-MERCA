@@ -308,8 +308,46 @@ namespace ALMACEN
                             Console.WriteLine($"[!] Error al leer las guías: {ex.Message}");
                         }
                         break;
+                        
+                    case "8":
+                        Console.WriteLine("\n--- RETIRAR / DESCONTAR STOCK ---");
+                        Console.Write("Ingresa el producto: ");
+                        string productoRetiro = Console.ReadLine()?.Trim() ?? "";
 
-s
+                        Console.Write("Ingresa la cantidad a retirar: ");
+                        string cantidadRetiroTexto = Console.ReadLine();
+                        
+                        if (!string.IsNullOrWhiteSpace(productoRetiro) &&
+                            int.TryParse(cantidadRetiroTexto, out int cantidadRetiro) &&
+                            cantidadRetiro > 0)
+                        {
+                            int disponible = CalcularStockDisponible(inventario, productoRetiro);
+
+                            if (cantidadRetiro > disponible)
+                            {
+                                Console.WriteLine($"\n[X] Stock insuficiente para '{productoRetiro}'. Disponible actual: {disponible}.");
+                            }
+                             else
+                            {
+                                string registroSalida = $"{DateTime.Now:yyyy-MM-dd HH:mm} | SALIDA | Producto: {productoRetiro} | Cantidad: {cantidadRetiro}";
+
+                                try
+                                {
+                                    File.AppendAllText(rutaTxt, registroSalida + Environment.NewLine);
+                                    inventario.Add(registroSalida);
+                                    Console.WriteLine($"\n[✓] Salida registrada. Stock restante de '{productoRetiro}': {disponible - cantidadRetiro}");
+                                                                    }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"\n[!] Error al guardar la salida: {ex.Message}");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("\n[X] Error: Ingresa un producto válido y una cantidad numérica mayor a 0.");
+                        }
+                        break;
 
                     case "9":
                         salir = true;
@@ -351,6 +389,42 @@ s
             }
 
             return lineas;
+        }
+
+        static int CalcularStockDisponible(List<string> inventario, string productoBuscado)
+        {
+            int total = 0;
+
+            foreach (string linea in inventario)
+            {
+                string[] partes = linea.Split('|');
+                if (partes.Length < 3) continue;
+
+                bool esSalida = linea.IndexOf("| SALIDA |", StringComparison.OrdinalIgnoreCase) >= 0;
+
+                string productoLinea = "";
+                int cantidadLinea = 0;
+
+                foreach (string parte in partes)
+                {
+                    string limpia = parte.Trim();
+                    if (limpia.StartsWith("Producto:", StringComparison.OrdinalIgnoreCase))
+                    {
+                        productoLinea = limpia.Substring("Producto:".Length).Trim();
+                    }
+                    else if (limpia.StartsWith("Cantidad:", StringComparison.OrdinalIgnoreCase))
+                    {
+                        int.TryParse(limpia.Substring("Cantidad:".Length).Trim(), out cantidadLinea);
+                    }
+                }
+
+                if (string.Equals(productoLinea, productoBuscado, StringComparison.OrdinalIgnoreCase) && cantidadLinea > 0)
+                {
+                    total += esSalida ? -cantidadLinea : cantidadLinea;
+                }
+            }
+
+            return total;
         }
     }
 }
