@@ -27,10 +27,11 @@ namespace ALMACEN
                 Console.WriteLine("3. Ver Guías");
                 Console.WriteLine("4. Ver Facturas");
                 Console.WriteLine("5. Registrar Guía con Fecha y Hora");
-                Console.WriteLine("6. Ver contenido de una Guía guardada");
-                Console.WriteLine("7. Salir");
+                Console.WriteLine("6. Registrar Factura con Fecha y Hora");
+                Console.WriteLine("7. Ver contenido de una Guía guardada");
+                Console.WriteLine("8. Salir");
                 Console.WriteLine("========================================");
-                Console.Write("Selecciona una opción (1-7): ");
+                Console.Write("Selecciona una opción (1-8): ");
 
                 string opcion = Console.ReadLine();
 
@@ -220,6 +221,37 @@ namespace ALMACEN
                         break;
 
                     case "6":
+                        Console.WriteLine("\n--- REGISTRAR NUEVA FACTURA ---");
+                        Console.Write("Ingresa el número de factura o descripción: ");
+                        string detalleFactura = Console.ReadLine();
+
+                        if (!string.IsNullOrWhiteSpace(detalleFactura))
+                        {
+                            try
+                            {
+                                Directory.CreateDirectory(rutaFacturas);
+
+                                string marcaTiempoFactura = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+                                string nombreArchivoFactura = Path.Combine(rutaFacturas, $"Factura_{marcaTiempoFactura}.txt");
+
+                                string contenidoFactura = $"REGISTRO DE FACTURA\nFecha y Hora: {DateTime.Now:yyyy-MM-dd HH:mm:ss}\nDetalle: {detalleFactura}\n";
+
+                                File.WriteAllText(nombreArchivoFactura, contenidoFactura);
+
+                                Console.WriteLine("\n[✓] ¡Factura guardada con éxito en la carpeta Facturas!");
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"\n[!] Error al crear la factura: {ex.Message}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("\n[X] Error: El detalle de la factura no puede estar vacío.");
+                        }
+                        break;
+
+                    case "7":
                         Console.WriteLine("\n--- VER CONTENIDO DE GUÍAS GUARDADAS ---");
                         try
                         {
@@ -276,13 +308,13 @@ namespace ALMACEN
                         }
                         break;
 
-                    case "7":
+                    case "8":
                         salir = true;
                         Console.WriteLine("\n¡Saliendo del sistema. Hasta luego!");
                         break;
 
                     default:
-                        Console.WriteLine("\n[X] Opción no válida. Ingresa un número del 1 al 7.");
+                        Console.WriteLine("\n[X] Opción no válida. Ingresa un número del 1 al 8.");
                         break;
                 }
 
