@@ -10,7 +10,6 @@ namespace ALMACEN
         {
             string rutaTxt = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\movimientos_vicmar.txt");
             string rutaDocumentos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\DOCUMENTOS");
-            
             string rutaGuias = Path.Combine(rutaDocumentos, "Guias");
 
             List<string> inventario = CargarInventarioDesdeArchivo(rutaTxt);
@@ -26,8 +25,8 @@ namespace ALMACEN
                 Console.WriteLine("2. Ver Inventario Actual");
                 Console.WriteLine("3. Ver documentos (Facturas / Guías)");
                 Console.WriteLine("4. Registrar Guía con Fecha y Hora");
-                Console.WriteLine("5. Ver contenido de una Guía guardada"); 
-                Console.WriteLine("6. Salir");                              
+                Console.WriteLine("5. Ver contenido de una Guía guardada");
+                Console.WriteLine("6. Salir");
                 Console.WriteLine("========================================");
                 Console.Write("Selecciona una opción (1-6): ");
 
@@ -37,12 +36,17 @@ namespace ALMACEN
                 {
                     case "1":
                         Console.WriteLine("\n--- REGISTRAR / AGREGAR STOCK ---");
-                        Console.Write("Ingresa el producto y la cantidad: ");
-                        string detalle = Console.ReadLine();
+                        Console.Write("Ingresa el producto: ");
+                        string producto = Console.ReadLine();
 
-                        if (!string.IsNullOrWhiteSpace(detalle))
+                        Console.Write("Ingresa la cantidad: ");
+                        string cantidadTexto = Console.ReadLine();
+
+                        if (!string.IsNullOrWhiteSpace(producto) &&
+                            int.TryParse(cantidadTexto, out int cantidad) &&
+                            cantidad > 0)
                         {
-                            string registro = $"{DateTime.Now:yyyy-MM-dd HH:mm} | {detalle}";
+                            string registro = $"{DateTime.Now:yyyy-MM-dd HH:mm} | Producto: {producto.Trim()} | Cantidad: {cantidad}";
 
                             try
                             {
@@ -57,7 +61,7 @@ namespace ALMACEN
                         }
                         else
                         {
-                            Console.WriteLine("\n[X] Error: El campo no puede estar vacío.");
+                            Console.WriteLine("\n[X] Error: Ingresa un producto válido y una cantidad numérica mayor a 0.");
                         }
                         break;
 
@@ -140,7 +144,7 @@ namespace ALMACEN
                         }
                         break;
 
-                    case "5": 
+                    case "5":
                         Console.WriteLine("\n--- VER CONTENIDO DE GUÍAS GUARDADAS ---");
                         try
                         {
@@ -185,7 +189,7 @@ namespace ALMACEN
                         }
                         break;
 
-                    case "6": // <-- Salir ahora es 6
+                    case "6":
                         salir = true;
                         Console.WriteLine("\n¡Saliendo del sistema. Hasta luego!");
                         break;
@@ -203,7 +207,6 @@ namespace ALMACEN
             }
         }
 
-        // Método auxiliar para leer los datos del archivo .txt al arrancar
         static List<string> CargarInventarioDesdeArchivo(string ruta)
         {
             List<string> lineas = new List<string>();
