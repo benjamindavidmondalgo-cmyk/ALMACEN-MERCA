@@ -204,19 +204,24 @@ namespace ALMACEN
                         string detalleGuia = Console.ReadLine() ?? "";
 
                         Console.Write("Cantidad de prendas: ");
-                        int cantidadPrendas = int.Parse(Console.ReadLine() ?? "0");
+                        if (!int.TryParse(Console.ReadLine(), out int cantidadPrendas) || cantidadPrendas < 0)
+                        {
+                            Console.WriteLine("\n[X] Cantidad no válida. Operación cancelada.");
+                            break;
+                        }
 
                         Console.Write("Monto total en soles: ");
-                        decimal monto = decimal.Parse(Console.ReadLine() ?? "0");
+                        if (!decimal.TryParse(Console.ReadLine(), out decimal monto) || monto < 0)
+                        {
+                            Console.WriteLine("\n[X] Monto no válido. Operación cancelada.");
+                            break;
+                        }
 
                         try
                         {
                             Directory.CreateDirectory(rutaGuias);
-
                             DateTime fecha = DateTime.Now;
-
-                            string archivo = Path.Combine(rutaGuias,
-                                $"Guia_{fecha:yyyy-MM-dd_HH-mm-ss}.txt");
+                            string archivo = Path.Combine(rutaGuias, $"Guia_{fecha:yyyy-MM-dd_HH-mm-ss}.txt");
 
                             string contenido =
                                 $"REGISTRO DE GUÍA - VICMAR\n" +
@@ -224,18 +229,18 @@ namespace ALMACEN
                                 $"Número de guía: {numeroGuia}\n" +
                                 $"Proveedor: {proveedor}\n" +
                                 $"Detalle: {detalleGuia}\n" +
-                               $"Cantidad: {cantidadPrendas} prendas\n" +
+                                $"Cantidad: {cantidadPrendas} prendas\n" +
                                 $"Monto total: S/ {monto:F2}\n" +
                                 $"Tipo: ENTRADA";
 
                             File.WriteAllText(archivo, contenido);
 
                             string rutaMovimientos = Path.GetFullPath(
-                                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                                @"..\..\..\movimientos_vicmar.txt"));
+                                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\movimientos_vicmar.txt"));
 
-                            File.AppendAllText(rutaMovimientos,
-                                $"{fecha:yyyy-MM-dd HH:mm} | Producto: {detalleGuia} | Cantidad: {cantidadPrendas}{Environment.NewLine}");
+                            string registroEntrada = $"{fecha:yyyy-MM-dd HH:mm} | Producto: {detalleGuia.Trim()} | Cantidad: {cantidadPrendas}";
+                            File.AppendAllText(rutaMovimientos, registroEntrada + Environment.NewLine);
+                            inventario.Add(registroEntrada);
 
                             Console.WriteLine("\n[✓] Guía registrada correctamente.");
                             Console.WriteLine("[✓] Mercadería agregada al inventario.");
@@ -244,11 +249,9 @@ namespace ALMACEN
                         {
                             Console.WriteLine("\n[!] Error: " + ex.Message);
                         }
-
                         break;
 
                     case "6":
-                    {
                         Console.WriteLine("\n--- REGISTRAR NUEVA FACTURA ---");
 
                         Console.Write("Número de factura: ");
@@ -261,23 +264,28 @@ namespace ALMACEN
                         string detalleFactura = Console.ReadLine() ?? "";
 
                         Console.Write("Cantidad de prendas: ");
-                        int cantidadFactura = int.Parse(Console.ReadLine() ?? "0");
+                        if (!int.TryParse(Console.ReadLine(), out int cantidadFactura) || cantidadFactura < 0)
+                        {
+                            Console.WriteLine("\n[X] Cantidad no válida. Operación cancelada.");
+                            break;
+                        }
 
                         Console.Write("Monto total en soles: ");
-                        decimal montoFactura = decimal.Parse(Console.ReadLine() ?? "0");
+                        if (!decimal.TryParse(Console.ReadLine(), out decimal montoFactura) || montoFactura < 0)
+                        {
+                            Console.WriteLine("\n[X] Monto no válido. Operación cancelada.");
+                            break;
+                        }
 
                         try
                         {
                             Directory.CreateDirectory(rutaFacturas);
+                            DateTime fechaFac = DateTime.Now;
+                            string archivoFac = Path.Combine(rutaFacturas, $"Factura_{fechaFac:yyyy-MM-dd_HH-mm-ss}.txt");
 
-                            DateTime fecha = DateTime.Now;
-
-                            string archivo = Path.Combine(rutaFacturas,
-                                $"Factura_{fecha:yyyy-MM-dd_HH-mm-ss}.txt");
-
-                            string contenido =
+                            string contenidoFac =
                                 $"REGISTRO DE FACTURA - VICMAR\n" +
-                                $"Fecha: {fecha}\n" +
+                                $"Fecha: {fechaFac}\n" +
                                 $"Número de factura: {numeroFactura}\n" +
                                 $"Cliente: {cliente}\n" +
                                 $"Detalle: {detalleFactura}\n" +
@@ -285,14 +293,14 @@ namespace ALMACEN
                                 $"Monto total: S/ {montoFactura:F2}\n" +
                                 $"Tipo: SALIDA";
 
-                            File.WriteAllText(archivo, contenido);
+                            File.WriteAllText(archivoFac, contenidoFac);
 
-                            string rutaMovimientos = Path.GetFullPath(
-                                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                                @"..\..\..\movimientos_vicmar.txt"));
+                            string rutaMovimientosFac = Path.GetFullPath(
+                                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\movimientos_vicmar.txt"));
 
-                            File.AppendAllText(rutaMovimientos,
-                                $"{fecha:yyyy-MM-dd HH:mm} | SALIDA | Producto: {detalleFactura} | Cantidad: {cantidadFactura}{Environment.NewLine}");
+                            string registroSalidaFac = $"{fechaFac:yyyy-MM-dd HH:mm} | SALIDA | Producto: {detalleFactura.Trim()} | Cantidad: {cantidadFactura}";
+                            File.AppendAllText(rutaMovimientosFac, registroSalidaFac + Environment.NewLine);
+                            inventario.Add(registroSalidaFac);
 
                             Console.WriteLine("\n[✓] Factura registrada correctamente.");
                             Console.WriteLine("[✓] Mercadería descontada del inventario.");
@@ -301,9 +309,7 @@ namespace ALMACEN
                         {
                             Console.WriteLine("\n[!] Error: " + ex.Message);
                         }
-
                         break;
-                    }
                     case "7":
                         Console.WriteLine("\n--- VER CONTENIDO DE GUÍAS GUARDADAS ---");
                         try
