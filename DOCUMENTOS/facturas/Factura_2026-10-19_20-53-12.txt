@@ -1,0 +1,6 @@
+REGISTRO DE FACTURA
+Fecha y Hora: 2026-10-19 20:53:12
+Número de Factura: E00-201
+Proveedor: EXIGE INDUSTRIAL S.A.C.
+Detalle: Mameluco impermiable
+Monto Total: S/ 2841.00
