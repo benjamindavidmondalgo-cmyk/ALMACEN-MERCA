@@ -10,3 +10,4 @@
 2026-11-25 00:10 | Producto: Camisa | Cantidad: 50
 2026-11-25 00:18 | SALIDA | Producto: Camisa | Cantidad: 20
 2026-11-25 00:19 | Producto: Camisa | Cantidad: 40
+2026-11-25 02:14 | Producto: Polera Oversize Negra | Cantidad: 4

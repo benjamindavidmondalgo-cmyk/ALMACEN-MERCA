@@ -30,9 +30,10 @@ namespace ALMACEN
                 Console.WriteLine("6. Registrar Factura con Fecha y Hora");
                 Console.WriteLine("7. Ver contenido de una Guía guardada");
                 Console.WriteLine("8. Retirar / Descontar Stock");
-                Console.WriteLine("9. Salir");
+                Console.WriteLine("9. Ver resumen de stock y alertas");
+                Console.WriteLine("10. Salir");
                 Console.WriteLine("========================================");
-                Console.Write("Selecciona una opción (1-9): ");
+                Console.Write("Selecciona una opción (1-10): ");
 
                 string opcion = Console.ReadLine();
 
@@ -408,8 +409,12 @@ namespace ALMACEN
                             Console.WriteLine("\n[X] Error: Ingresa un producto válido.");
                         }
                         break;
-
                     case "9":
+                        MostrarResumenStock(inventario);
+                        Console.WriteLine("\nPresiona una tecla para continuar...");
+                        Console.ReadKey();
+                        break;
+                    case "10":
                         salir = true;
                         Console.WriteLine("\n¡Saliendo del sistema. Hasta luego!");
                         break;
@@ -485,6 +490,61 @@ namespace ALMACEN
             }
 
             return total;
+        }
+        static void MostrarResumenStock(List<string> inventario)
+        {
+            Console.WriteLine("\n--- RESUMEN DE STOCK ACTUAL ---");
+            Dictionary<string, int> stockPorProducto = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (string linea in inventario)
+            {
+                string productoLinea = "";
+                int cantidadLinea = 0;
+                bool esSalida = linea.Contains("SALIDA", StringComparison.OrdinalIgnoreCase);
+
+                string[] partes = linea.Split('|');
+                foreach (string parte in partes)
+                {
+                    string limpia = parte.Trim();
+                    if (limpia.StartsWith("Producto:", StringComparison.OrdinalIgnoreCase))
+                    {
+                        productoLinea = limpia.Substring("Producto:".Length).Trim();
+                    }
+                    else if (limpia.StartsWith("Cantidad:", StringComparison.OrdinalIgnoreCase))
+                    {
+                        int.TryParse(limpia.Substring("Cantidad:".Length).Trim(), out cantidadLinea);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(productoLinea))
+                {
+                    if (!stockPorProducto.ContainsKey(productoLinea))
+                    {
+                        stockPorProducto[productoLinea] = 0;
+                    }
+                    stockPorProducto[productoLinea] += esSalida ? -cantidadLinea : cantidadLinea;
+                }
+            }
+
+            if (stockPorProducto.Count == 0)
+            {
+                Console.WriteLine("No hay productos registrados.");
+                return;
+            }
+
+            foreach (var kvp in stockPorProducto)
+            {
+                if (kvp.Value <= 5)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"- {kvp.Key}: {kvp.Value} unidades disponibles [¡ALERTA: STOCK BAJO!]");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.WriteLine($"- {kvp.Key}: {kvp.Value} unidades disponibles");
+                }
+            }
         }
     }
 }
