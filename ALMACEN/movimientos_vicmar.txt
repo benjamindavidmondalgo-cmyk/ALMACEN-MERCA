@@ -7,3 +7,6 @@
 2026-10-21 02:40 | cocos - Cantidad: 5
 >>>>>>> e36a0b97e3744518047989f9b05c4157d69ac403
 2026-11-24 02:40 | Producto: telas | Cantidad: 4
+2026-11-25 00:10 | Producto: Camisa | Cantidad: 50
+2026-11-25 00:18 | SALIDA | Producto: Camisa | Cantidad: 20
+2026-11-25 00:19 | Producto: Camisa | Cantidad: 40

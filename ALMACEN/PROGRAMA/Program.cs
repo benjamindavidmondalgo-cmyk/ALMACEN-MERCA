@@ -367,11 +367,13 @@ namespace ALMACEN
                         string productoRetiro = Console.ReadLine()?.Trim() ?? "";
 
                         Console.Write("Ingresa la cantidad a retirar: ");
-                        string cantidadRetiroTexto = Console.ReadLine();
-                        
-                        if (!string.IsNullOrWhiteSpace(productoRetiro) &&
-                            int.TryParse(cantidadRetiroTexto, out int cantidadRetiro) &&
-                            cantidadRetiro > 0)
+                        if (!int.TryParse(Console.ReadLine(), out int cantidadRetiro) || cantidadRetiro <= 0)
+                        {
+                            Console.WriteLine("\n[X] Cantidad no válida. Operación cancelada.");
+                            break;
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(productoRetiro))
                         {
                             int disponible = CalcularStockDisponible(inventario, productoRetiro);
 
@@ -379,7 +381,7 @@ namespace ALMACEN
                             {
                                 Console.WriteLine($"\n[X] Stock insuficiente para '{productoRetiro}'. Disponible actual: {disponible}.");
                             }
-                             else
+                            else
                             {
                                 string registroSalida = $"{DateTime.Now:yyyy-MM-dd HH:mm} | SALIDA | Producto: {productoRetiro} | Cantidad: {cantidadRetiro}";
 
@@ -388,7 +390,7 @@ namespace ALMACEN
                                     File.AppendAllText(rutaTxt, registroSalida + Environment.NewLine);
                                     inventario.Add(registroSalida);
                                     Console.WriteLine($"\n[✓] Salida registrada. Stock restante de '{productoRetiro}': {disponible - cantidadRetiro}");
-                                                                    }
+                                }
                                 catch (Exception ex)
                                 {
                                     Console.WriteLine($"\n[!] Error al guardar la salida: {ex.Message}");
@@ -397,7 +399,7 @@ namespace ALMACEN
                         }
                         else
                         {
-                            Console.WriteLine("\n[X] Error: Ingresa un producto válido y una cantidad numérica mayor a 0.");
+                            Console.WriteLine("\n[X] Error: Ingresa un producto válido.");
                         }
                         break;
 

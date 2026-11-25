@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\HP\\Desktop\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj": {}
+    "C:\\Users\\ADMIN\\OneDrive\\Escritorio\\Laboratorio-Git\\ALMACEN-MERCA\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj": {}
   },
   "projects": {
-    "C:\\Users\\HP\\Desktop\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj": {
+    "C:\\Users\\ADMIN\\OneDrive\\Escritorio\\Laboratorio-Git\\ALMACEN-MERCA\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\Desktop\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj",
+        "projectUniqueName": "C:\\Users\\ADMIN\\OneDrive\\Escritorio\\Laboratorio-Git\\ALMACEN-MERCA\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj",
         "projectName": "ALMACEN",
-        "projectPath": "C:\\Users\\HP\\Desktop\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj",
-        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\Desktop\\ALMACEN-MERCA\\ALMACEN\\obj\\",
+        "projectPath": "C:\\Users\\ADMIN\\OneDrive\\Escritorio\\Laboratorio-Git\\ALMACEN-MERCA\\ALMACEN-MERCA\\ALMACEN\\ALMACEN.csproj",
+        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ADMIN\\OneDrive\\Escritorio\\Laboratorio-Git\\ALMACEN-MERCA\\ALMACEN-MERCA\\ALMACEN\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -41,7 +46,7 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.300"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net10.0": {
@@ -63,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
