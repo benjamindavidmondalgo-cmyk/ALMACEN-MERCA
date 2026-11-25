@@ -248,36 +248,62 @@ namespace ALMACEN
                         break;
 
                     case "6":
+                    {
                         Console.WriteLine("\n--- REGISTRAR NUEVA FACTURA ---");
-                        Console.Write("Ingresa el número de factura o descripción: ");
-                        string detalleFactura = Console.ReadLine();
 
-                        if (!string.IsNullOrWhiteSpace(detalleFactura))
+                        Console.Write("Número de factura: ");
+                        string numeroFactura = Console.ReadLine() ?? "";
+
+                        Console.Write("Cliente: ");
+                        string cliente = Console.ReadLine() ?? "";
+
+                        Console.Write("Detalle de mercadería: ");
+                        string detalleFactura = Console.ReadLine() ?? "";
+
+                        Console.Write("Cantidad de prendas: ");
+                        int cantidadFactura = int.Parse(Console.ReadLine() ?? "0");
+
+                        Console.Write("Monto total en soles: ");
+                        decimal montoFactura = decimal.Parse(Console.ReadLine() ?? "0");
+
+                        try
                         {
-                            try
-                            {
-                                Directory.CreateDirectory(rutaFacturas);
+                            Directory.CreateDirectory(rutaFacturas);
 
-                                string marcaTiempoFactura = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-                                string nombreArchivoFactura = Path.Combine(rutaFacturas, $"Factura_{marcaTiempoFactura}.txt");
+                            DateTime fecha = DateTime.Now;
 
-                                string contenidoFactura = $"REGISTRO DE FACTURA\nFecha y Hora: {DateTime.Now:yyyy-MM-dd HH:mm:ss}\nDetalle: {detalleFactura}\n";
+                            string archivo = Path.Combine(rutaFacturas,
+                                $"Factura_{fecha:yyyy-MM-dd_HH-mm-ss}.txt");
 
-                                File.WriteAllText(nombreArchivoFactura, contenidoFactura);
+                            string contenido =
+                                $"REGISTRO DE FACTURA - VICMAR\n" +
+                                $"Fecha: {fecha}\n" +
+                                $"Número de factura: {numeroFactura}\n" +
+                                $"Cliente: {cliente}\n" +
+                                $"Detalle: {detalleFactura}\n" +
+                                $"Cantidad: {cantidadFactura} prendas\n" +
+                                $"Monto total: S/ {montoFactura:F2}\n" +
+                                $"Tipo: SALIDA";
 
-                                Console.WriteLine("\n[✓] ¡Factura guardada con éxito en la carpeta Facturas!");
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine($"\n[!] Error al crear la factura: {ex.Message}");
-                            }
+                            File.WriteAllText(archivo, contenido);
+
+                            string rutaMovimientos = Path.GetFullPath(
+                                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                @"..\..\..\movimientos_vicmar.txt"));
+
+                            File.AppendAllText(rutaMovimientos,
+                                $"{fecha:yyyy-MM-dd HH:mm} | SALIDA | Producto: {detalleFactura} | Cantidad: {cantidadFactura}{Environment.NewLine}");
+
+                            Console.WriteLine("\n[✓] Factura registrada correctamente.");
+                            Console.WriteLine("[✓] Mercadería descontada del inventario.");
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            Console.WriteLine("\n[X] Error: El detalle de la factura no puede estar vacío.");
+                            Console.WriteLine("\n[!] Error: " + ex.Message);
                         }
+
                         break;
-
+                    }
                     case "7":
                         Console.WriteLine("\n--- VER CONTENIDO DE GUÍAS GUARDADAS ---");
                         try
