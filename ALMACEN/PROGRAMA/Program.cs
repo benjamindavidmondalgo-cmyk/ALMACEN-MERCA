@@ -190,35 +190,61 @@ namespace ALMACEN
                         }
                         break;
 
+                   
                     case "5":
                         Console.WriteLine("\n--- REGISTRAR NUEVA GUÍA ---");
-                        Console.Write("Ingresa el número de guía o descripción: ");
-                        string detalleGuia = Console.ReadLine();
 
-                        if (!string.IsNullOrWhiteSpace(detalleGuia))
+                        Console.Write("Número de guía: ");
+                        string numeroGuia = Console.ReadLine() ?? "";
+
+                        Console.Write("Proveedor: ");
+                        string proveedor = Console.ReadLine() ?? "";
+
+                        Console.Write("Detalle: ");
+                        string detalleGuia = Console.ReadLine() ?? "";
+
+                        Console.Write("Cantidad de prendas: ");
+                        int cantidadPrendas = int.Parse(Console.ReadLine() ?? "0");
+
+                        Console.Write("Monto total en soles: ");
+                        decimal monto = decimal.Parse(Console.ReadLine() ?? "0");
+
+                        try
                         {
-                            try
-                            {
-                                Directory.CreateDirectory(rutaGuias);
+                            Directory.CreateDirectory(rutaGuias);
 
-                                string marcaTiempoArchivo = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-                                string nombreArchivoGuia = Path.Combine(rutaGuias, $"Guia_{marcaTiempoArchivo}.txt");
+                            DateTime fecha = DateTime.Now;
 
-                                string contenidoGuia = $"REGISTRO DE GUÍA\nFecha y Hora: {DateTime.Now:yyyy-MM-dd HH:mm:ss}\nDetalle: {detalleGuia}\n";
+                            string archivo = Path.Combine(rutaGuias,
+                                $"Guia_{fecha:yyyy-MM-dd_HH-mm-ss}.txt");
 
-                                File.WriteAllText(nombreArchivoGuia, contenidoGuia);
+                            string contenido =
+                                $"REGISTRO DE GUÍA - VICMAR\n" +
+                                $"Fecha: {fecha}\n" +
+                                $"Número de guía: {numeroGuia}\n" +
+                                $"Proveedor: {proveedor}\n" +
+                                $"Detalle: {detalleGuia}\n" +
+                               $"Cantidad: {cantidadPrendas} prendas\n" +
+                                $"Monto total: S/ {monto:F2}\n" +
+                                $"Tipo: ENTRADA";
 
-                                Console.WriteLine("\n[✓] ¡Guía guardada con éxito en la carpeta Guias!");
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine($"\n[!] Error al crear la guía: {ex.Message}");
-                            }
+                            File.WriteAllText(archivo, contenido);
+
+                            string rutaMovimientos = Path.GetFullPath(
+                                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                @"..\..\..\movimientos_vicmar.txt"));
+
+                            File.AppendAllText(rutaMovimientos,
+                                $"{fecha:yyyy-MM-dd HH:mm} | Producto: {detalleGuia} | Cantidad: {cantidadPrendas}{Environment.NewLine}");
+
+                            Console.WriteLine("\n[✓] Guía registrada correctamente.");
+                            Console.WriteLine("[✓] Mercadería agregada al inventario.");
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            Console.WriteLine("\n[X] Error: El detalle de la guía no puede estar vacío.");
+                            Console.WriteLine("\n[!] Error: " + ex.Message);
                         }
+
                         break;
 
                     case "6":
